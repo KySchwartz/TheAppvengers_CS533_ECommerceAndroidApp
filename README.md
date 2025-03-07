@@ -1,2 +1,2 @@
-# TheAppvengers_CS533_ECommerceAndroidApp
-This is a repository for an android shopping app created by the Appvengers for CS533 Mobile Computing.  This project is based on the shopping app project by Muhammad Noman Tariq.
+# Shopping-App Video Tutorial Demo
+[Untitled_ Feb 9, 2023 2_44 AM.webm](https://user-images.githubusercontent.com/104327746/217791706-0933ff68-6169-4382-bcc0-72182ec5660b.webm)
