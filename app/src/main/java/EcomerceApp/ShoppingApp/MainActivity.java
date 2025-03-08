@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Read JSON from assets (as shown in previous responses)
+        // Read JSON from assets
         try {
             AssetManager assetManager = getAssets();
             InputStream inputStream = assetManager.open("products.json");
