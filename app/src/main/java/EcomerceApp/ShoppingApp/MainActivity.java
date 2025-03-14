@@ -1,4 +1,6 @@
 package EcomerceApp.ShoppingApp;
+import EcomerceApp.ShoppingApp.Models.MainModel;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,8 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import EcomerceApp.ShoppingApp.Models.Product;
 import EcomerceApp.ShoppingApp.Adapters.MainAdapter;
-import EcomerceApp.ShoppingApp.Models.MainModel;
 import EcomerceApp.ShoppingApp.databinding.ActivityMainBinding;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 public class MainActivity extends AppCompatActivity {
    ActivityMainBinding binding;
 
@@ -33,10 +41,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Button btnRecentlyViewed = findViewById(R.id.btn_recently_viewed);
+        btnRecentlyViewed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new RecentlyViewedFragment());
+            }
+        });
         // Step 7: Load the fragment
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, new RecentlyViewedFragment()) // Make sure ID matches your XML
+                .replace(R.id.fragment_container, new RecentlyViewedFragment()) // Make sure ID matches your XML
                 .commit();
 
         // Read JSON from assets
@@ -50,20 +66,12 @@ public class MainActivity extends AppCompatActivity {
             List<Product> productList = gson.fromJson(jsonString, new TypeToken<List<Product>>(){}.getType());
 
 
-            ArrayList<MainModel> list = new ArrayList<>();
+            List<Product> list = new ArrayList<>();
             for (Product product : productList) {
-                // Get the drawable resource ID based on the image name from JSON
-                String imageName = product.getImage();
-                int imageResId = getResources().getIdentifier(imageName, "drawable", getPackageName());
-
-                MainModel model = new MainModel(
-                        product.getName(),
-                        product.getDescription(),
-                        product.getPrice(),
-                        imageName
-                );
-                list.add(model);
+                list.add(product);  // Use Product directly instead of MainModel
             }
+
+            Log.d("MainActivity", "Product list size: " + list.size());
 
             // Set up RecyclerView
             MainAdapter adapter = new MainAdapter(list, MainActivity.this);
@@ -73,6 +81,14 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(MainActivity.this, "Error loading JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override

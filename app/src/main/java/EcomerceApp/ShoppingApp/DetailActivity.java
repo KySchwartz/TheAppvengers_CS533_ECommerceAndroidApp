@@ -1,147 +1,91 @@
 package EcomerceApp.ShoppingApp;
-import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-
 import EcomerceApp.ShoppingApp.databinding.ActivityDetailBinding;
+
 public class DetailActivity extends AppCompatActivity {
     ActivityDetailBinding binded;
-    int count=1;
+    int count = 1;
     int localvarprice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binded = ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binded.getRoot());
+
         final DbHelper helper = new DbHelper(this);
-        if (getIntent().getIntExtra("type", 0) == 1) {
-            String imageName = getIntent().getStringExtra("image");
-            final int image= getResources().getIdentifier(imageName, "drawable", getPackageName());
-            int price = Integer.parseInt(getIntent().getStringExtra("price"));
-            final String name = getIntent().getStringExtra("name");
-            final String description = getIntent().getStringExtra("des");
-            int item_quantity=Integer.parseInt(binded.quantity.getText().toString());
-            binded.detailimage.setImageResource(image);
-            binded.detailprice.setText(String.valueOf(price));
-            binded.orderLabel.setText(name);
-            binded.orderText.setText(description);
-            //database insertion
-            binded.placeOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        int type = getIntent().getIntExtra("type", 1); // Default type = 1 (Order)
 
+        String imageName = getIntent().getStringExtra("image");
+        final int image = getResources().getIdentifier(imageName, "drawable", getPackageName());
+        String price = getIntent().getStringExtra("price");
+        final String name = getIntent().getStringExtra("name");
+        final String description = getIntent().getStringExtra("des");
 
-                    if (binded.nameBox.getText().toString().isEmpty() || binded.phoneBox.getText().toString().isEmpty()) {
-                        Toast.makeText(DetailActivity.this, "Missing All Filed Required", Toast.LENGTH_SHORT).show();
+        binded.detailimage.setImageResource(image);
+        binded.detailprice.setText(price);
+        binded.orderLabel.setText(name);
+        binded.orderText.setText(description);
+
+        if (type == 1) {
+            // **This is an order, keep order UI elements visible**
+            binded.placeOrder.setVisibility(View.VISIBLE);
+            binded.plus.setVisibility(View.VISIBLE);
+            binded.minus.setVisibility(View.VISIBLE);
+            binded.quantity.setVisibility(View.VISIBLE);
+
+            binded.placeOrder.setOnClickListener(view -> {
+                if (binded.nameBox.getText().toString().isEmpty() || binded.phoneBox.getText().toString().isEmpty()) {
+                    Toast.makeText(DetailActivity.this, "Missing Required Fields", Toast.LENGTH_SHORT).show();
+                } else {
+                    boolean insertData = helper.insertOrder(
+                            binded.nameBox.getText().toString(),
+                            binded.phoneBox.getText().toString(),
+                            image,
+                            Integer.parseInt(binded.detailprice.getText().toString()),
+                            description,
+                            name,
+                            Integer.parseInt(binded.quantity.getText().toString())
+                    );
+
+                    if (insertData) {
+                        Toast.makeText(DetailActivity.this, "Order Placed!", Toast.LENGTH_SHORT).show();
                     } else {
-                        boolean insertdata = helper.insertOrder(binded.nameBox.getText().toString(), binded.phoneBox.getText().toString(), image,Integer.parseInt(binded.detailprice.getText().toString()), description, name, Integer.parseInt(binded.quantity.getText().toString())
-                        );
-                        if (insertdata) {
-                            Toast.makeText(DetailActivity.this, "Data Inserted", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(DetailActivity.this, "Oops! Something wrong ##Data Not Inserted", Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(DetailActivity.this, "Order Failed!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-
-            //increase or decrease quantity buttons
-            binded.plus.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                   count=count+1;
-                   binded.quantity.setText(String.valueOf(count));
-                   binded.detailprice.setText(String.valueOf(Integer.parseInt(binded.detailprice.getText().toString())+price));
-                    Toast.makeText(DetailActivity.this, "Quantity Increased "+binded.detailprice.getText(), Toast.LENGTH_SHORT).show();
-                }
-            });
-            //decrease quantity
-            binded.minus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if(!binded.quantity.getText().equals("1"))
-                    {
-                        count=count-1;
-                        binded.quantity.setText(String.valueOf(count));
-                        binded.detailprice.setText(String.valueOf(Integer.parseInt(binded.detailprice.getText().toString())-price));
-                        Toast.makeText(DetailActivity.this, "Quantity Decreased "+binded.detailprice.getText(), Toast.LENGTH_SHORT).show();
-
-                    }
-                }
+            // **Increase Quantity**
+            binded.plus.setOnClickListener(view -> {
+                count++;
+                binded.quantity.setText(String.valueOf(count));
+                binded.detailprice.setText(String.valueOf(Integer.parseInt(binded.detailprice.getText().toString()) + Integer.parseInt(price)));
             });
 
-        }
-        else
-        {
-
-            int id=getIntent().getIntExtra("Id",0);
-            Cursor cursor=helper.getOrderById(id);
-
-            final int image=cursor.getInt(4);
-            final String  description=cursor.getString(5);
-            final String name=cursor.getString(6);
-            final String quantity=String.valueOf(cursor.getInt(7));
-            final String Price=String.valueOf(cursor.getInt(3));
-            localvarprice=Integer.parseInt(Price)/Integer.parseInt(quantity);
-            Toast.makeText(this, cursor.getString(0), Toast.LENGTH_SHORT).show();
-            binded.detailimage.setImageResource(image);
-            binded.detailprice.setText(Price);
-            binded.orderLabel.setText(name);
-            binded.orderText.setText(description);
-            binded.quantity.setText(quantity);
-            //int quantity=Integer.parseInt(binded.quantity.getText().toString());
-            binded.nameBox.setText(cursor.getString(1));
-            binded.phoneBox.setText(cursor.getString(2));
-            binded.placeOrder.setText("Update Now");
-            binded.placeOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                 boolean updated=helper.UpdateOrder(
-                            binded.nameBox.getText().toString(), binded.phoneBox.getText().toString(),image,Integer.parseInt(binded.detailprice.getText().toString()),description, name, Integer.parseInt(binded.quantity.getText().toString()),id);
-                 if(updated)
-                 {
-                     Toast.makeText(DetailActivity.this, "Record Updated", Toast.LENGTH_SHORT).show();
-                 }
-                 else
-                 {
-                     Toast.makeText(DetailActivity.this, "Oops! Not Updated", Toast.LENGTH_SHORT).show();
-                 }
-                }
-            });
-
-//increase or decrease quantity buttons
-            binded.plus.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    count=Integer.parseInt(binded.quantity.getText().toString())+1;
+            // **Decrease Quantity**
+            binded.minus.setOnClickListener(view -> {
+                if (count > 1) {
+                    count--;
                     binded.quantity.setText(String.valueOf(count));
-                    binded.detailprice.setText(String.valueOf(Integer.parseInt(binded.detailprice.getText().toString())+localvarprice));
-                    Toast.makeText(DetailActivity.this, "Quantity Increased "+binded.quantity.getText(), Toast.LENGTH_SHORT).show();
+                    binded.detailprice.setText(String.valueOf(Integer.parseInt(binded.detailprice.getText().toString()) - Integer.parseInt(price)));
                 }
             });
-            //decrease quantity
-            binded.minus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
 
-                    if(!binded.quantity.getText().equals("1"))
-                    {
-                        count=Integer.parseInt(binded.quantity.getText().toString())-1;
-                        binded.quantity.setText(String.valueOf(count));
-                        binded.detailprice.setText(String.valueOf(Integer.parseInt(binded.detailprice.getText().toString())-localvarprice));
-                        Toast.makeText(DetailActivity.this, "Quantity Decreased "+binded.quantity.getText(), Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-            });
-        }
+        } else if (type == 2) {
+            // **This is a Recently Viewed product, hide order UI elements**
+            binded.placeOrder.setVisibility(View.GONE);
+            binded.plus.setVisibility(View.GONE);
+            binded.minus.setVisibility(View.GONE);
+            binded.quantity.setVisibility(View.GONE);
+            binded.nameBox.setVisibility(View.GONE);
+            binded.phoneBox.setVisibility(View.GONE);
         }
     }
+}

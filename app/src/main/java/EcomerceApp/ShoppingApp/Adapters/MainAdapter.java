@@ -1,4 +1,5 @@
 package EcomerceApp.ShoppingApp.Adapters;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -6,92 +7,75 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import android.util.Log;
-
+import java.util.List;
+import EcomerceApp.ShoppingApp.Models.Product;
 import EcomerceApp.ShoppingApp.DetailActivity;
-import EcomerceApp.ShoppingApp.Models.MainModel;
+import EcomerceApp.ShoppingApp.MainActivity;
 import EcomerceApp.ShoppingApp.R;
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.viewholder> {
-    ArrayList<MainModel> list;
-    Context context;
-    public MainAdapter(ArrayList<MainModel> list,Context context)
-    {
-        this.context=context;
-        this.list=list;
+
+public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
+    private List<Product> productList;
+    private Context context;
+
+    public MainAdapter(List<Product> productList, Context context) {
+        this.productList = productList;
+        this.context = context;
     }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView productName, productPrice, productDescription;
+        ImageView productImage;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            productName = itemView.findViewById(R.id.name);
+            productPrice = itemView.findViewById(R.id.mainOrderPrice);
+            productDescription = itemView.findViewById(R.id.description);
+            productImage = itemView.findViewById(R.id.imageView);
+        }
+    }
+
     @NonNull
     @Override
-    public viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.sample_mainfood,parent,false);
-        return new viewholder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sample_mainfood, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull viewholder holder, int position) {
-              final  MainModel model=list.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Product product = productList.get(position);
 
-        // Get the image name from the model
-        String imageName = model.getImage();
+        holder.productName.setText(product.getName());
+        holder.productPrice.setText(product.getPrice());
+        holder.productDescription.setText(product.getDescription());
 
-        // Log the image name to ensure it's correct
-                Log.d("ImageName", "Image Name: " + imageName);
+        int imageResId = context.getResources().getIdentifier(
+                product.getImage(), "drawable", context.getPackageName()
+        );
+        holder.productImage.setImageResource(imageResId);
 
-        // Get the resource ID using the image name
-                int imageResId = context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra("name", product.getName());
+            intent.putExtra("price", product.getPrice());
+            intent.putExtra("des", product.getDescription());
+            intent.putExtra("image", product.getImage());
 
-        // Log the resource ID to check if the image was found
-                Log.d("ImageResource", "Resource ID: " + imageResId);
-
-
-            if (imageResId != 0) {
-                holder.foodimage.setImageResource(imageResId);  // Set the image in ImageView
+            if (context instanceof MainActivity) {
+                intent.putExtra("type", 1);  // Normal product click (order)
             } else {
-                // Handle case if the image resource doesn't exist
-                holder.foodimage.setImageResource(R.drawable.dress);  // Set a default image if the resource is not found
+                intent.putExtra("type", 2);  // Recently viewed click
             }
 
-
-              holder.mainName.setText(model.getName());
-                holder.price.setText(model.getPrice());
-        holder.description.setText(model.getDescription());
-              holder.itemView.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View view) {
-                      Intent intent= new Intent(context, DetailActivity.class);
-                      intent.putExtra("image",model.getImage());
-                      intent.putExtra("price",model.getPrice());
-                      intent.putExtra("des",model.getDescription());
-                      intent.putExtra("name",model.getName());
-                      intent.putExtra("type",1);
-                      context.startActivity(intent);
-                  }
-              });
-        {
-
-        }
-
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
-    }
-
-    public class viewholder extends RecyclerView.ViewHolder
-    {
-        ImageView foodimage;
-        TextView mainName,price,description;
-        public viewholder(@NonNull View itemView) {
-            super(itemView);
-            foodimage=itemView.findViewById(R.id.imageView);
-            mainName=itemView.findViewById(R.id.name);
-            price=itemView.findViewById(R.id.mainOrderPrice);
-            description=itemView.findViewById(R.id.description);
-        }
+        return productList.size();
     }
 }
