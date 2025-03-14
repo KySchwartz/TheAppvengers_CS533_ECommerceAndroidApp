@@ -21,9 +21,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
+import EcomerceApp.ShoppingApp.Models.Product;
 import EcomerceApp.ShoppingApp.Adapters.MainAdapter;
 import EcomerceApp.ShoppingApp.Models.MainModel;
-import EcomerceApp.ShoppingApp.Models.Product;
 import EcomerceApp.ShoppingApp.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
    ActivityMainBinding binding;
@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        // Step 7: Load the fragment
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, new RecentlyViewedFragment()) // Make sure ID matches your XML
+                .commit();
 
         // Read JSON from assets
         try {
