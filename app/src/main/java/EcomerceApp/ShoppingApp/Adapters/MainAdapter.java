@@ -57,6 +57,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.productName.setText(product.getName());
         holder.productPrice.setText(product.getPrice());
         holder.productDescription.setText(product.getDescription());
+        holder.productImage.setImageResource(context.getResources().getIdentifier(product.getImage(), "drawable", context.getPackageName()));
 
         int imageResId = context.getResources().getIdentifier(
                 product.getImage(), "drawable", context.getPackageName()
@@ -64,6 +65,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.productImage.setImageResource(imageResId);
 
         holder.itemView.setOnClickListener(v -> {
+            // ✅ Save clicked product to Recently Viewed (only if the context is MainActivity)
+            if (context instanceof MainActivity) {
+                ((MainActivity) context).addToRecentlyViewed(product);
+            }
+
+            // ✅ Open DetailActivity with product details
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("name", product.getName());
             intent.putExtra("price", product.getPrice());
@@ -78,6 +85,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
             context.startActivity(intent);
         });
+
     }
 
     @Override

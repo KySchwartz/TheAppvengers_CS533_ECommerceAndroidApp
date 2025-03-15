@@ -41,7 +41,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Button btnRecentlyViewed = findViewById(R.id.btn_recently_viewed);
-        btnRecentlyViewed.setOnClickListener(v -> openRecentlyViewedFragment());
+        btnRecentlyViewed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MainActivity", "Recently Viewed Button Clicked");
+                Log.d("MainActivity", "Recently Viewed List Size: " + recentlyViewedList.size());
+
+
+                if (recentlyViewedList.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
+                } else {
+                    openRecentlyViewedFragment();  // ✅ Call the method to show the fragment
+                }
+            }
+        });
+
 
         // Read JSON from assets
         try {
@@ -63,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Method to add clicked products to recentlyViewedList
-    private void addToRecentlyViewed(Product product) {
+    public void addToRecentlyViewed(Product product) {
         if (!recentlyViewedList.contains(product)) {
             recentlyViewedList.add(product);
         }
@@ -72,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
     // Open RecentlyViewedFragment and pass recently viewed items
     private void openRecentlyViewedFragment() {
         // Ensure correct type conversion
+        Log.d("MainActivity", "Recently Viewed List Size: " + recentlyViewedList.size());
+
         RecentlyViewedFragment fragment = RecentlyViewedFragment.newInstance(new ArrayList<>(recentlyViewedList));
         loadFragment(fragment);
     }
