@@ -45,16 +45,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("MainActivity", "Recently Viewed Button Clicked");
-                Log.d("MainActivity", "Recently Viewed List Size: " + recentlyViewedList.size());
-
+                Log.d("MainActivity", "Opening fragment, list size: " + recentlyViewedList.size());
 
                 if (recentlyViewedList.isEmpty()) {
                     Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
                 } else {
-                    openRecentlyViewedFragment();  // ✅ Call the method to show the fragment
+                    openRecentlyViewedFragment();
                 }
             }
         });
+
 
 
         // Read JSON from assets
@@ -80,16 +80,25 @@ public class MainActivity extends AppCompatActivity {
     public void addToRecentlyViewed(Product product) {
         if (!recentlyViewedList.contains(product)) {
             recentlyViewedList.add(product);
+            Log.d("MainActivity", "Added to recently viewed: " + product.getName());
         }
+        Log.d("MainActivity", "Recently Viewed List: " + recentlyViewedList.size());
     }
+
 
     // Open RecentlyViewedFragment and pass recently viewed items
     private void openRecentlyViewedFragment() {
-        // Ensure correct type conversion
+        Log.d("MainActivity", "Opening Recently Viewed Fragment");
         Log.d("MainActivity", "Recently Viewed List Size: " + recentlyViewedList.size());
 
+        if (recentlyViewedList.isEmpty()) {
+            Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         RecentlyViewedFragment fragment = RecentlyViewedFragment.newInstance(new ArrayList<>(recentlyViewedList));
-        loadFragment(fragment);
+        binding.recyclerView.setVisibility(View.GONE);
+        loadFragment(fragment); // ✅ Make sure this is called
     }
 
     private void loadFragment(Fragment fragment) {
@@ -113,4 +122,16 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            // If there's a fragment, remove it and restore the main list
+            getSupportFragmentManager().popBackStack();
+            binding.recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }
