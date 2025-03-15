@@ -18,10 +18,16 @@ import EcomerceApp.ShoppingApp.R;
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private List<Product> productList;
     private Context context;
+    private OnProductClickListener productClickListener;
 
-    public MainAdapter(List<Product> productList, Context context) {
-        this.productList = productList;
+    public interface OnProductClickListener {
+        void onProductClick(Product product);
+    }
+
+    public MainAdapter(List<Product> products, Context context, OnProductClickListener listener) {
+        this.productList = products;
         this.context = context;
+        this.productClickListener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
