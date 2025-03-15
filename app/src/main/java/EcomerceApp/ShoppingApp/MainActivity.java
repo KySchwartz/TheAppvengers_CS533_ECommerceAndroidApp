@@ -93,14 +93,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            // If there's a fragment, remove it and restore the main list
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (fragment != null) {
+            // Hide the fragment container instead of exiting the app
+            findViewById(R.id.fragment_container).setVisibility(View.GONE);
             getSupportFragmentManager().popBackStack();
-            binding.recyclerView.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -112,13 +115,31 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.orders:
-                // Open OrderActivity when clicking "View Orders"
                 startActivity(new Intent(MainActivity.this, OrderActivity.class));
-                return true;
+                break;
+            case R.id.nav_about:
+                loadFragment(new AboutFragment());  // Load "About" fragment
+                break;
             default:
-                return super.onOptionsItemSelected(item);
+                throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
+        return super.onOptionsItemSelected(item);
     }
+
+
+    // Load fragment
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        // Make sure the fragment container is visible
+        findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
+
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
 
 
 }

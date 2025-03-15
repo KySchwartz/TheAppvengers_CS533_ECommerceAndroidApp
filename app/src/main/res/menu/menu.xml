@@ -8,5 +8,11 @@
         android:title="View Orders"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/nav_about"
+        android:title="About"
+        android:icon="@android:drawable/ic_menu_info_details"
+        app:showAsAction="never"/>
+
 
 </menu>
