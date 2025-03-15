@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- View Orders Menu Item -->
     <item
         android:id="@+id/orders"
         android:title="View Orders"
         android:orderInCategory="100"
-        android:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>
