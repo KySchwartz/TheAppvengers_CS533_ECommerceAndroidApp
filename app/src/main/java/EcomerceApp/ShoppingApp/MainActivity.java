@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
             Gson gson = new Gson();
             List<Product> productList = gson.fromJson(jsonString, new TypeToken<List<Product>>(){}.getType());
 
-            Log.d("MainActivity", "Product list size: " + productList.size());
-
             // Set up RecyclerView
             MainAdapter adapter = new MainAdapter(productList, this, this::addToRecentlyViewed);
             binding.recyclerView.setAdapter(adapter);
@@ -75,9 +73,7 @@ public class MainActivity extends AppCompatActivity {
     public void addToRecentlyViewed(Product product) {
         if (!recentlyViewedList.contains(product)) {
             recentlyViewedList.add(product);
-            Log.d("MainActivity", "Added to recently viewed: " + product.getName());
         }
-        Log.d("MainActivity", "Recently Viewed List: " + recentlyViewedList.size());
     }
 
 
