@@ -26,15 +26,15 @@ public class RecentlyViewedAdapter extends RecyclerView.Adapter<RecentlyViewedAd
 
         public ViewHolder(View itemView) {
             super(itemView);
-            productName = itemView.findViewById(R.id.product_name);
-            productPrice = itemView.findViewById(R.id.product_price);
-            productImage = itemView.findViewById(R.id.product_image);
+            productName = itemView.findViewById(R.id.name);
+            productPrice = itemView.findViewById(R.id.mainOrderPrice);
+            productImage = itemView.findViewById(R.id.imageView);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recently_viewed, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sample_mainfood, parent, false);
         return new ViewHolder(view);
     }
 

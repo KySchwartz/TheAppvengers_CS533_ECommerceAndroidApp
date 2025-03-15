@@ -41,20 +41,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Button btnRecentlyViewed = findViewById(R.id.btn_recently_viewed);
-        btnRecentlyViewed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("MainActivity", "Recently Viewed Button Clicked");
-                Log.d("MainActivity", "Opening fragment, list size: " + recentlyViewedList.size());
-
-                if (recentlyViewedList.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
-                } else {
-                    openRecentlyViewedFragment();
-                }
+        btnRecentlyViewed.setOnClickListener(v -> {
+            if (recentlyViewedList.isEmpty()) {
+                Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(MainActivity.this, RecentlyViewedActivity.class);
+                intent.putParcelableArrayListExtra("recentlyViewedList", new ArrayList<>(recentlyViewedList));
+                startActivity(intent);
             }
         });
-
 
 
         // Read JSON from assets
@@ -95,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        RecentlyViewedFragment fragment = RecentlyViewedFragment.newInstance(new ArrayList<>(recentlyViewedList));
+        ArrayList<Product> recentlyViewedArrayList = new ArrayList<>(recentlyViewedList);
+        RecentlyViewedFragment fragment = RecentlyViewedFragment.newInstance(new ArrayList<>(recentlyViewedArrayList));
         binding.recyclerView.setVisibility(View.GONE);
         loadFragment(fragment); // ✅ Make sure this is called
     }

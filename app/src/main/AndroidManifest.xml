@@ -9,23 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ecomerce">
+        <activity android:name=".RecentlyViewedActivity"></activity>
+
         <provider
             android:name=".Login.DetailProvider"
             android:authorities="EcomerceApp.ShoppingApp.Login.DetailProvider"
             android:enabled="true"
             android:exported="false" />
+
         <activity
             android:name=".forget"
             android:exported="false" />
         <activity
             android:name=".SignUp"
-            android:exported="false" >
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".LoginPage"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

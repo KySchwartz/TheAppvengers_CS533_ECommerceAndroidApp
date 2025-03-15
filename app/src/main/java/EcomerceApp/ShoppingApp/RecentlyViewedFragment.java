@@ -4,9 +4,13 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,14 +47,17 @@ public class RecentlyViewedFragment extends Fragment {
         // Retrieve the recently viewed list from arguments
         if (getArguments() != null) {
             recentlyViewedList = getArguments().getParcelableArrayList("recentlyViewedList");
-        }
+            Log.d("RecentlyViewedFragment", "Received Recently Viewed List: " + recentlyViewedList.size());
 
-        if (recentlyViewedList == null) {
-            recentlyViewedList = new ArrayList<>();
+            if (recentlyViewedList != null && !recentlyViewedList.isEmpty()) {
+                Log.d("RecentlyViewedFragment", "Displaying " + recentlyViewedList.size() + " recently viewed items.");
+                adapter = new RecentlyViewedAdapter(recentlyViewedList, getContext());
+                recyclerView.setAdapter(adapter);
+            } else {
+                Log.d("RecentlyViewedFragment", "No recently viewed items to display.");
+                Toast.makeText(getContext(), "No recently viewed items", Toast.LENGTH_SHORT).show();
+            }
         }
-
-        adapter = new RecentlyViewedAdapter(recentlyViewedList, getContext());
-        recyclerView.setAdapter(adapter);
 
         return view;
     }

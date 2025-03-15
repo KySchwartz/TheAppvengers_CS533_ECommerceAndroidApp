@@ -65,23 +65,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.productImage.setImageResource(imageResId);
 
         holder.itemView.setOnClickListener(v -> {
-            // ✅ Save clicked product to Recently Viewed (only if the context is MainActivity)
             if (context instanceof MainActivity) {
                 ((MainActivity) context).addToRecentlyViewed(product);
             }
 
-            // ✅ Open DetailActivity with product details
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("name", product.getName());
             intent.putExtra("price", product.getPrice());
             intent.putExtra("des", product.getDescription());
             intent.putExtra("image", product.getImage());
-
-            if (context instanceof MainActivity) {
-                intent.putExtra("type", 1);  // Normal product click (order)
-            } else {
-                intent.putExtra("type", 2);  // Recently viewed click
-            }
+            intent.putExtra("type", 1);  // Normal product click
 
             context.startActivity(intent);
         });
