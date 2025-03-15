@@ -5,12 +5,12 @@
     <!-- View Orders Menu Item -->
     <item
         android:id="@+id/orders"
-        android:title="View Orders"
+        android:title="@string/orders_menu"
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item
         android:id="@+id/nav_about"
-        android:title="About"
+        android:title="@string/about_menu"
         android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="never"/>
 

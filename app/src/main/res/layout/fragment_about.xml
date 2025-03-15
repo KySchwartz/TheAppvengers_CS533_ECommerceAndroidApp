@@ -9,14 +9,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to our E-commerce App!"
+        android:text="@string/about_title"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@color/yellow"
         android:paddingBottom="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This app lets you browse and order products easily."
+        android:text="@string/about_description"
+        android:textColor="@color/black"
         android:textSize="16sp"/>
 </LinearLayout>

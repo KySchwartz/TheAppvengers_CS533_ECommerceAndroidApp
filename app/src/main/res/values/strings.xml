@@ -20,6 +20,15 @@
     <string name="hint_email">Email</string>
     <string name="hint_phone">Phone</string>
     <string name="hint_confirm_password">Confirm Password</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="about_title">About Our App</string>
+    <string name="about_description">This app helps users browse products, track orders, and manage their shopping experience seamlessly.</string>
+    <string name="product_name">Product Name</string>
+    <string name="initial_price">$0.00</string>
+    <string name="orders_menu">View Orders</string>
+    <string name="about_menu">About</string>
+
+
+
 </resources>
