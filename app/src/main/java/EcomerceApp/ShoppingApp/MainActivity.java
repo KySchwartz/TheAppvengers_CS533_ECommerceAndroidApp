@@ -49,11 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(new RecentlyViewedFragment());
             }
         });
-        // Step 7: Load the fragment
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new RecentlyViewedFragment()) // Make sure ID matches your XML
-                .commit();
+
 
         // Read JSON from assets
         try {
