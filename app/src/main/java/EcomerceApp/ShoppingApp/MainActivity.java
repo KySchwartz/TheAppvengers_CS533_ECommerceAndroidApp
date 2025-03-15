@@ -81,21 +81,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // Open RecentlyViewedFragment and pass recently viewed items
-    private void openRecentlyViewedFragment() {
-        Log.d("MainActivity", "Opening Recently Viewed Fragment");
-        Log.d("MainActivity", "Recently Viewed List Size: " + recentlyViewedList.size());
-
-        if (recentlyViewedList.isEmpty()) {
-            Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ArrayList<Product> recentlyViewedArrayList = new ArrayList<>(recentlyViewedList);
-        RecentlyViewedFragment fragment = RecentlyViewedFragment.newInstance(new ArrayList<>(recentlyViewedArrayList));
-        binding.recyclerView.setVisibility(View.GONE);
-        loadFragment(fragment); // ✅ Make sure this is called
-    }
-
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
