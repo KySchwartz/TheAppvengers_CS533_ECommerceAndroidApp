@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Method to add clicked products to recentlyViewedList
+    // Add clicked products to recentlyViewedList
     public void addToRecentlyViewed(Product product) {
         if (!recentlyViewedList.contains(product)) {
             recentlyViewedList.add(product);
@@ -80,14 +80,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "Recently Viewed List: " + recentlyViewedList.size());
     }
 
-
-    private void loadFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 
     public String convertStreamToString(InputStream is) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {

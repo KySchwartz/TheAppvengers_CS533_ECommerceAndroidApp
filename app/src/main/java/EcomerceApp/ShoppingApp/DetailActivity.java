@@ -11,7 +11,6 @@ import EcomerceApp.ShoppingApp.databinding.ActivityDetailBinding;
 public class DetailActivity extends AppCompatActivity {
     ActivityDetailBinding binded;
     int count = 1;
-    int localvarprice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,7 +16,6 @@ public class Product implements Parcelable {
         this.image = image;
     }
 
-    // Parcelable implementation
     protected Product(Parcel in) {
         name = in.readString();
         description = in.readString();

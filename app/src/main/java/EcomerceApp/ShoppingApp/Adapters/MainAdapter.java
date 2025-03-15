@@ -74,7 +74,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             intent.putExtra("price", product.getPrice());
             intent.putExtra("des", product.getDescription());
             intent.putExtra("image", product.getImage());
-            intent.putExtra("type", 1);  // Normal product click
+            intent.putExtra("type", 1);
 
             context.startActivity(intent);
         });

@@ -22,7 +22,7 @@ public class RecentlyViewedActivity extends AppCompatActivity {
         binding = ActivityRecentlyViewedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Get the recently viewed list from intent
+        // Get the recently viewed list
         recentlyViewedList = getIntent().getParcelableArrayListExtra("recentlyViewedList");
 
         if (recentlyViewedList == null || recentlyViewedList.isEmpty()) {
