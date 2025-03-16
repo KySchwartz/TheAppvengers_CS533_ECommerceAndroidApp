@@ -27,42 +27,41 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
-    private List<Product> recentlyViewedList = new ArrayList<>();
+    DbHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //Added Recently Viewed button
-        Button btnRecentlyViewed = findViewById(R.id.btn_recently_viewed);
-        //Listener for click Recently Viewed Button calls Recently Viewed activity
-        btnRecentlyViewed.setOnClickListener(v -> {
-            if (recentlyViewedList.isEmpty()) {
+        dbHelper = new DbHelper(this); // Initialize database helper
 
+        // Setup "Recently Viewed" Button
+        Button btnRecentlyViewed = findViewById(R.id.btn_recently_viewed);
+        btnRecentlyViewed.setOnClickListener(v -> {
+            List<Product> recentlyViewedList = dbHelper.getRecentlyViewed();
+            if (recentlyViewedList.isEmpty()) {
                 Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(MainActivity.this, RecentlyViewedActivity.class);
-                intent.putParcelableArrayListExtra("recentlyViewedList", new ArrayList<>(recentlyViewedList));
                 startActivity(intent);
             }
         });
 
-
-        // Read JSON from assets
+        // Read JSON from assets and populate main product list
         try {
             InputStream inputStream = getAssets().open("products.json");
             String jsonString = convertStreamToString(inputStream);
             Gson gson = new Gson();
             List<Product> productList = gson.fromJson(jsonString, new TypeToken<List<Product>>(){}.getType());
 
-            // Set up RecyclerView for Recently Viewed
-            MainAdapter adapter = new MainAdapter(productList, this, this::addToRecentlyViewed);
+            // Set up RecyclerView for Main Product List
+            MainAdapter adapter = new MainAdapter(productList, this);
             binding.recyclerView.setAdapter(adapter);
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -71,14 +70,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Add clicked products to recentlyViewedList
-    public void addToRecentlyViewed(Product product) {
-        if (!recentlyViewedList.contains(product)) {
-            recentlyViewedList.add(product);
-        }
-    }
-
-
+    // Helper method to read JSON from assets
     public String convertStreamToString(InputStream is) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
             StringBuilder sb = new StringBuilder();
@@ -96,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-
         if (fragment != null) {
-            // Hide the fragment container instead of exiting the app
             findViewById(R.id.fragment_container).setVisibility(View.GONE);
             getSupportFragmentManager().popBackStack();
         } else {
@@ -106,10 +96,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu); // Loads the menu.xml file
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -120,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, OrderActivity.class));
                 break;
             case R.id.nav_about:
-                loadFragment(new AboutFragment());  // Load "About" fragment
+                loadFragment(new AboutFragment()); // Load "About" fragment
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
@@ -128,20 +117,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    // Load fragment
+    // Load a fragment
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        // Make fragment container visible
         findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
-
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
-
-
 }

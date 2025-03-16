@@ -10,30 +10,26 @@ import java.util.List;
 import EcomerceApp.ShoppingApp.Adapters.RecentlyViewedAdapter;
 import EcomerceApp.ShoppingApp.Models.Product;
 import EcomerceApp.ShoppingApp.databinding.ActivityRecentlyViewedBinding;
+
 //Recently Viewed activity
 public class RecentlyViewedActivity extends AppCompatActivity {
-    ActivityRecentlyViewedBinding binding;
-    //Create list to hold recently viewed items: a list of products
-    private List<Product> recentlyViewedList = new ArrayList<>();
+    private RecyclerView recyclerView;
     private RecentlyViewedAdapter adapter;
+    private List<Product> recentlyViewedList;
+    private DbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityRecentlyViewedBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_recently_viewed);
 
-        // Get the recently viewed list
-        recentlyViewedList = getIntent().getParcelableArrayListExtra("recentlyViewedList");
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if (recentlyViewedList == null || recentlyViewedList.isEmpty()) {
-            Toast.makeText(this, "No recently viewed items", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        dbHelper = new DbHelper(this);
+        recentlyViewedList = dbHelper.getRecentlyViewed(); // Get items from SQLite
 
-        // RecyclerView
         adapter = new RecentlyViewedAdapter(recentlyViewedList, this);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
     }
 }

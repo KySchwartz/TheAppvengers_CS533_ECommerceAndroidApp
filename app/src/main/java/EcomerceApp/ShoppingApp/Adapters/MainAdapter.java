@@ -10,24 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
 import EcomerceApp.ShoppingApp.Models.Product;
 import EcomerceApp.ShoppingApp.DetailActivity;
-import EcomerceApp.ShoppingApp.MainActivity;
+import EcomerceApp.ShoppingApp.DbHelper;
 import EcomerceApp.ShoppingApp.R;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private List<Product> productList;
     private Context context;
-    private OnProductClickListener productClickListener;
 
-    public interface OnProductClickListener {
-        void onProductClick(Product product);
-    }
-
-    public MainAdapter(List<Product> products, Context context, OnProductClickListener listener) {
+    public MainAdapter(List<Product> products, Context context) {
         this.productList = products;
         this.context = context;
-        this.productClickListener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,7 +52,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.productName.setText(product.getName());
         holder.productPrice.setText(product.getPrice());
         holder.productDescription.setText(product.getDescription());
-        holder.productImage.setImageResource(context.getResources().getIdentifier(product.getImage(), "drawable", context.getPackageName()));
 
         int imageResId = context.getResources().getIdentifier(
                 product.getImage(), "drawable", context.getPackageName()
@@ -65,10 +59,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.productImage.setImageResource(imageResId);
 
         holder.itemView.setOnClickListener(v -> {
-            if (context instanceof MainActivity) {
-                ((MainActivity) context).addToRecentlyViewed(product);
-            }
+            // Save to recently viewed in database
+            DbHelper dbHelper = new DbHelper(context);
+            dbHelper.insertRecentlyViewed(product);
 
+            // Open DetailActivity with product info
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("name", product.getName());
             intent.putExtra("price", product.getPrice());
@@ -78,7 +73,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
             context.startActivity(intent);
         });
-
     }
 
     @Override
