@@ -1,7 +1,7 @@
 package EcomerceApp.ShoppingApp.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
-
+//Parcelable Product class
 public class Product implements Parcelable {
     private String name;
     private String description;
@@ -15,7 +15,7 @@ public class Product implements Parcelable {
         this.price = price;
         this.image = image;
     }
-
+    //Parcel to pass product info from MainActivity to RecentlyViewedActivity
     protected Product(Parcel in) {
         name = in.readString();
         description = in.readString();

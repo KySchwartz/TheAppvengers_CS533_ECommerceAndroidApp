@@ -10,9 +10,10 @@ import java.util.List;
 import EcomerceApp.ShoppingApp.Adapters.RecentlyViewedAdapter;
 import EcomerceApp.ShoppingApp.Models.Product;
 import EcomerceApp.ShoppingApp.databinding.ActivityRecentlyViewedBinding;
-
+//Recently Viewed activity
 public class RecentlyViewedActivity extends AppCompatActivity {
     ActivityRecentlyViewedBinding binding;
+    //Create list to hold recently viewed items: a list of products
     private List<Product> recentlyViewedList = new ArrayList<>();
     private RecentlyViewedAdapter adapter;
 
@@ -30,7 +31,7 @@ public class RecentlyViewedActivity extends AppCompatActivity {
             return;
         }
 
-        // Set up RecyclerView
+        // RecyclerView
         adapter = new RecentlyViewedAdapter(recentlyViewedList, this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);

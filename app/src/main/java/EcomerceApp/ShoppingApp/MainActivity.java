@@ -11,10 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -40,9 +39,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //Added Recently Viewed button
         Button btnRecentlyViewed = findViewById(R.id.btn_recently_viewed);
+        //Listener for click Recently Viewed Button calls Recently Viewed activity
         btnRecentlyViewed.setOnClickListener(v -> {
             if (recentlyViewedList.isEmpty()) {
+
                 Toast.makeText(MainActivity.this, "No recently viewed items", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(MainActivity.this, RecentlyViewedActivity.class);
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             Gson gson = new Gson();
             List<Product> productList = gson.fromJson(jsonString, new TypeToken<List<Product>>(){}.getType());
 
-            // Set up RecyclerView
+            // Set up RecyclerView for Recently Viewed
             MainAdapter adapter = new MainAdapter(productList, this, this::addToRecentlyViewed);
             binding.recyclerView.setAdapter(adapter);
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        // Make sure the fragment container is visible
+        // Make fragment container visible
         findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
 
         transaction.replace(R.id.fragment_container, fragment);

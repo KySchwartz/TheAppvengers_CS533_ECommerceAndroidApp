@@ -27,9 +27,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.viewHolder
         this.context=context;
     }
 
-
-
-
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -103,7 +100,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.viewHolder
             soldItemName=itemView.findViewById(R.id.orderName);
             orderNumber=itemView.findViewById(R.id.orderNumber);
             orderPrice=itemView.findViewById(R.id.priceOrder);
-//            customername=itemView.findViewById(R.id.CustomerName);
         }
 
     }

@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+//Class AboutFragment for About section
 public class AboutFragment extends Fragment {
-
+    //Empty constructor
     public AboutFragment() {
 
     }
-
+    //On create view, load xml fragment_about layout
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
