@@ -1,8 +1,6 @@
 package EcomerceApp.ShoppingApp.Models;
-import android.os.Parcel;
-import android.os.Parcelable;
-//Parcelable Product class
-public class Product implements Parcelable {
+
+public class Product {
     private String name;
     private String description;
     private String price;
@@ -14,38 +12,6 @@ public class Product implements Parcelable {
         this.description = description;
         this.price = price;
         this.image = image;
-    }
-    //Parcel to pass product info from MainActivity to RecentlyViewedActivity
-    protected Product(Parcel in) {
-        name = in.readString();
-        description = in.readString();
-        price = in.readString();
-        image = in.readString();
-    }
-
-    public static final Creator<Product> CREATOR = new Creator<Product>() {
-        @Override
-        public Product createFromParcel(Parcel in) {
-            return new Product(in);
-        }
-
-        @Override
-        public Product[] newArray(int size) {
-            return new Product[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeString(price);
-        dest.writeString(image);
     }
 
     // Getters
