@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <!-- RecyclerView for product list (Takes up most of the space) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        tools:listitem="@layout/sample_mainfood"/>
+
+    <!-- Recently Viewed Button (Moves to the bottom) -->
+    <Button
+        android:id="@+id/btn_recently_viewed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/recently_viewed_button"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"/>
+
+
+    <!-- Empty fragment container (Hidden initially) -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:visibility="gone"/>
+</LinearLayout>
