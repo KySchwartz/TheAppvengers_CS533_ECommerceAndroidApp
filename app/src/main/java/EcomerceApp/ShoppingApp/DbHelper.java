@@ -159,6 +159,7 @@ public class DbHelper extends SQLiteOpenHelper {
         database.execSQL("DELETE FROM " + RECENTLY_VIEWED_TB);
     }
 
+    // Add order to Firebase
     public boolean addOrder(String name, String phone, int image, int price, String description, String foodname, int quantity) {
         Map<String, Object> order = new HashMap<>();
         order.put("name", name);

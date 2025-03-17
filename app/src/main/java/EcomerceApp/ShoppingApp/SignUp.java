@@ -46,14 +46,14 @@ public class SignUp extends AppCompatActivity {
         values.put("CUSTOMER_NAME", Phone);
         values.put("CUSTOMER_PHONE", Name);
 
-        // Create a new user with a first and last name
+        // Create a new user in Firebase
         Map<String, Object> user = new HashMap<>();
         user.put("CUSTOMER_EMAIL", Email);
         user.put("CUSTOMER_PASSWORD", Password);
         user.put("CUSTOMER_NAME", Phone);
         user.put("CUSTOMER_PHONE", Name);
 
-        // Add a new document with a generated ID
+        // Add a new document with a generated ID to Firebase
         db.collection("users")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

@@ -58,6 +58,7 @@ public class DetailActivity extends AppCompatActivity {
                             Integer.parseInt(binded.quantity.getText().toString())
                     );
 
+                    // Add order to Firebase
                      boolean addData = helper.addOrder(
                             binded.nameBox.getText().toString(),
                             binded.phoneBox.getText().toString(),
