@@ -2,13 +2,12 @@ package EcomerceApp.ShoppingApp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
+import EcomerceApp.ShoppingApp.Models.CartItem;
 import EcomerceApp.ShoppingApp.databinding.ActivityDetailBinding;
 
 public class DetailActivity extends AppCompatActivity {
@@ -21,8 +20,6 @@ public class DetailActivity extends AppCompatActivity {
         binded = ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binded.getRoot());
 
-        final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
         final DbHelper helper = new DbHelper(this);
         int type = getIntent().getIntExtra("type", 1); // Default type = 1 (Order)
 
@@ -31,6 +28,7 @@ public class DetailActivity extends AppCompatActivity {
         String price = getIntent().getStringExtra("price");
         final String name = getIntent().getStringExtra("name");
         final String description = getIntent().getStringExtra("des");
+        final String productId = getIntent().getStringExtra("id"); // Add id from extra
 
         binded.detailimage.setImageResource(image);
         binded.detailprice.setText(price);
@@ -43,8 +41,10 @@ public class DetailActivity extends AppCompatActivity {
             binded.plus.setVisibility(View.VISIBLE);
             binded.minus.setVisibility(View.VISIBLE);
             binded.quantity.setVisibility(View.VISIBLE);
+            binded.addToCart.setVisibility(View.VISIBLE);
 
             binded.placeOrder.setOnClickListener(view -> {
+                Log.d("DetailActivity", "Button Clicked");
                 if (binded.nameBox.getText().toString().isEmpty() || binded.phoneBox.getText().toString().isEmpty()) {
                     Toast.makeText(DetailActivity.this, "Missing Required Fields", Toast.LENGTH_SHORT).show();
                 } else {
@@ -58,8 +58,7 @@ public class DetailActivity extends AppCompatActivity {
                             Integer.parseInt(binded.quantity.getText().toString())
                     );
 
-                    // Add order to Firebase
-                     boolean addData = helper.addOrder(
+                    boolean addData = helper.addOrder(
                             binded.nameBox.getText().toString(),
                             binded.phoneBox.getText().toString(),
                             image,
@@ -74,6 +73,29 @@ public class DetailActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(DetailActivity.this, "Order Failed!", Toast.LENGTH_SHORT).show();
                     }
+                }
+            });
+
+            // Add Click Listener to Add to Cart Button
+            binded.addToCart.setOnClickListener(view -> {
+                // Get product details (you may need to adjust these based on how you are getting your data)
+                //String productId = intent.getStringExtra("productId"); // Assuming you are passing the ID from mainActivity
+                String productName = name;
+                double productPrice = Double.parseDouble(price); // Convert String to double
+                int productQuantity = 1;
+
+                Log.d("DetailActivity", "Button Clicked");
+
+                // Create a CartItem
+                CartItem cartItem = new CartItem(productId, productQuantity, productPrice, productName, image); // You can add an image
+                // Add the item to the cart
+                boolean success = helper.addToCart(cartItem);
+                // Provide feedback to the user
+                if (success) {
+                    Toast.makeText(DetailActivity.this, "Added to Cart", Toast.LENGTH_SHORT).show();
+                    // You might want to update the cart count in MainActivity here
+                } else {
+                    Toast.makeText(DetailActivity.this, "Failed to add to Cart", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -101,6 +123,8 @@ public class DetailActivity extends AppCompatActivity {
             binded.quantity.setVisibility(View.GONE);
             binded.nameBox.setVisibility(View.GONE);
             binded.phoneBox.setVisibility(View.GONE);
+            binded.addToCart.setVisibility(View.GONE);
+
         }
     }
 }

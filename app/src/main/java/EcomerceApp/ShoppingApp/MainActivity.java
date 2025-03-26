@@ -16,6 +16,7 @@ import android.os.Bundle;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     DbHelper dbHelper;
+    TextView cartBadgeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem cartItem = menu.findItem(R.id.action_cart);
+        View actionView = cartItem.getActionView();
+        View cartBadgeTextView = actionView.findViewById(R.id.cart_badge);
+        updateCartCount();
+        actionView.setOnClickListener(view -> onOptionsItemSelected(cartItem));
         return true;
     }
 
@@ -110,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, OrderActivity.class));
         } else if (itemId == R.id.nav_about) {
             loadFragment(new AboutFragment()); // Load "About" fragment
+        } else if (item.getItemId() == R.id.action_cart) {
+            // Start the CartActivity
+            startActivity(new Intent(this, CartActivity.class));
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -125,5 +136,18 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    // Update cart count
+    private void updateCartCount() {
+        if (cartBadgeTextView == null) return;
+        runOnUiThread(() -> {
+            if (dbHelper.getCartCount() == 0) {
+                cartBadgeTextView.setVisibility(View.GONE);
+            } else {
+                cartBadgeTextView.setVisibility(View.VISIBLE);
+                cartBadgeTextView.setText(String.valueOf(dbHelper.getCartCount()));
+            }
+        });
     }
 }

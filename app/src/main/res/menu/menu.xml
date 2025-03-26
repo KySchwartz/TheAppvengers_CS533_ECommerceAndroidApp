@@ -4,6 +4,13 @@
 
     <!-- View Orders Menu Item -->
     <item
+        android:id="@+id/action_cart"
+        android:title="Cart"
+        android:icon="@drawable/ic_cart"
+        app:showAsAction="always"
+        app:actionLayout="@layout/cart_action_item"/>
+
+    <item
         android:id="@+id/orders"
         android:title="@string/orders_menu"
         android:orderInCategory="100"

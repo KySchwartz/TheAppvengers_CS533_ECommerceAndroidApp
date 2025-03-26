@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -13,22 +15,34 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import EcomerceApp.ShoppingApp.Models.CartItem;
 import EcomerceApp.ShoppingApp.Models.OrdersModel;
 import EcomerceApp.ShoppingApp.Models.Product;
 
 public class DbHelper extends SQLiteOpenHelper {
+    //Only one database will be used.
     final static String DbName = "foodData.db";
     final static int version = 6;  // Incremented version for new table
     final static String DB_TB = "orders";
     final static String RECENTLY_VIEWED_TB = "recently_viewed";
+    private FirebaseFirestore firestore;
+    public static final String TABLE_CART = "cart";
+    public static final String CART_ID = "cartid";
+    public static final String COLUMN_PRODUCT_ID = "productid";
+    public static final String COLUMN_QUANTITY = "quantity";
+    public static final String COLUMN_PRICE = "price";
+    public static final String COLUMN_PRODUCT_NAME = "productname";
+    public static final String COLUMN_IMAGE_URL = "imageUrl";
 
     public DbHelper(@Nullable Context context) {
         super(context, DbName, null, version);
+        firestore = FirebaseFirestore.getInstance();
     }
 
-    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    //private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -38,13 +52,23 @@ public class DbHelper extends SQLiteOpenHelper {
         // Creating table for recently viewed products
         db.execSQL("CREATE TABLE " + RECENTLY_VIEWED_TB +
                 " (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, price TEXT, image TEXT)");
+
+        String createCartTable = "CREATE TABLE " + TABLE_CART + " (" + CART_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_PRODUCT_ID + " TEXT, " + COLUMN_QUANTITY + " INTEGER, " + COLUMN_PRICE + " REAL, "
+                + COLUMN_PRODUCT_NAME + " TEXT, " + COLUMN_IMAGE_URL + " TEXT)";
+        db.execSQL(createCartTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DB_TB);
-        db.execSQL("DROP TABLE IF EXISTS " + RECENTLY_VIEWED_TB);
-        onCreate(db);
+        // We are using version 6, so it will run this code when we have a version previous than 7.
+        // it will drop the old tables and then will create them again.
+        if (oldVersion < 6) {
+            db.execSQL("DROP TABLE IF EXISTS " + DB_TB);
+            db.execSQL("DROP TABLE IF EXISTS " + RECENTLY_VIEWED_TB);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CART);
+            onCreate(db);
+        }
     }
 
     // Insert an order
@@ -159,7 +183,6 @@ public class DbHelper extends SQLiteOpenHelper {
         database.execSQL("DELETE FROM " + RECENTLY_VIEWED_TB);
     }
 
-    // Add order to Firebase
     public boolean addOrder(String name, String phone, int image, int price, String description, String foodname, int quantity) {
         Map<String, Object> order = new HashMap<>();
         order.put("name", name);
@@ -179,5 +202,82 @@ public class DbHelper extends SQLiteOpenHelper {
                     // Handle failure
                 });
         return name != null;
+    }
+
+    // Add to cart
+    public boolean addToCart(CartItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_PRODUCT_ID, item.getProductId());
+        cv.put(COLUMN_QUANTITY, item.getQuantity());
+        cv.put(COLUMN_PRICE, item.getPrice());
+        cv.put(COLUMN_PRODUCT_NAME, item.getProductName());
+        cv.put(COLUMN_IMAGE_URL, item.getImageUrl());
+        long insert = db.insert(TABLE_CART, null, cv);
+        return insert != -1;
+    }
+
+    // Get Cart Items
+    public List<CartItem> getCart() {
+        List<CartItem> cartItems = new ArrayList<>();
+        String query = "SELECT * FROM " + TABLE_CART;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String productId = cursor.getString(1);
+                int quantity = cursor.getInt(2);
+                double price = cursor.getDouble(3);
+                String productName = cursor.getString(4);
+                int imageUrl = cursor.getInt(5);
+                CartItem item = new CartItem(productId, quantity, price, productName, imageUrl);
+                cartItems.add(item);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return cartItems;
+    }
+
+    //Empty cart
+    public boolean emptyCart() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long delete = db.delete(TABLE_CART, null, null);
+        return delete != -1;
+    }
+
+    //Add order
+    public void addOrder(String orderId, String userId, List<CartItem> items, double totalAmount, long orderDate, OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        Map<String, Object> order = new HashMap<>();
+        order.put("orderId", orderId);
+        order.put("userId", userId);
+        order.put("totalAmount", totalAmount);
+        order.put("orderDate", orderDate);
+        List<Map<String, Object>> orderItems = new ArrayList<>();
+        for (CartItem item : items) {
+            Map<String, Object> itemMap = new HashMap<>();
+            itemMap.put("productId", item.getProductId());
+            itemMap.put("quantity", item.getQuantity());
+            itemMap.put("price", item.getPrice());
+            itemMap.put("productName", item.getProductName());
+            itemMap.put("imageUrl", item.getImageUrl());
+            orderItems.add(itemMap);
+        }
+        order.put("items", orderItems);
+        firestore.collection("orders").document(orderId)
+                .set(order)
+                .addOnSuccessListener(onSuccess)
+                .addOnFailureListener(onFailure);
+    }
+
+    public int getCartCount() {
+        int cartCount = 0;
+        List<CartItem> cartItems = getCart();
+        for (CartItem item : cartItems) {
+            cartCount += item.getQuantity();
+        }
+        Log.d("CartCount", "Cart count: " + cartCount);
+        return cartCount;
     }
 }
