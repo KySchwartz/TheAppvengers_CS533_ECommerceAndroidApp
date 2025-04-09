@@ -46,6 +46,7 @@ dependencies {
     androidTestImplementation ("androidx.test.ext:junit:1.1.3")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
     implementation("com.google.code.gson:gson:2.8.8") // Use the latest version
+    implementation ("com.google.firebase:firebase-auth:22.1.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)

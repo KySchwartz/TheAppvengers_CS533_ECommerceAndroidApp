@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -16,11 +17,13 @@ import java.util.UUID;
 import EcomerceApp.ShoppingApp.Adapters.CartAdapter;
 import EcomerceApp.ShoppingApp.Models.CartItem;
 import EcomerceApp.ShoppingApp.databinding.ActivityCartBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class CartActivity extends AppCompatActivity {
     ActivityCartBinding binding;
     DbHelper dbHelper;
     CartAdapter adapter;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +36,9 @@ public class CartActivity extends AppCompatActivity {
         binding.cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Load cart items from SQLite
         loadCartItems();
-        // Initialize Firestore
+        // Initialize Firestore and Firebase Authentication
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
         // Setup Checkout button
         binding.checkoutButton.setOnClickListener(view -> {
             // Get the cart items from SQLite
@@ -43,10 +47,12 @@ public class CartActivity extends AppCompatActivity {
                 Toast.makeText(CartActivity.this, "Your Cart is empty", Toast.LENGTH_SHORT).show();
             } else {
                 // Get User Data
-                String userId = "user123"; // Replace with actual user ID
+                String userId = firebaseAuth.getCurrentUser().getUid();
+                // Get Order Date
                 long orderDate = System.currentTimeMillis();
                 // Get total price
                 double totalPrice = 0;
+                // Calculate total price
                 for (CartItem item : cartItems) {
                     totalPrice += item.getPrice() * item.getQuantity();
                 }
@@ -70,6 +76,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
+
     // Helper method to load cart items from SQLite
     private void loadCartItems() {
         List<CartItem> cartItems = dbHelper.getCart();

@@ -1,7 +1,18 @@
 package EcomerceApp.ShoppingApp.Models;
+
+import java.util.List;
+import java.util.Map;
+
 public class OrdersModel {
+    private String orderId;
     int orderImage;
     String soldItemName,orderPrice,orderNumber ,customername;
+
+    // New fields for Firebase integration
+    private long orderDate; // Timestamp for the order date
+    private double totalAmount; // Total amount for the order
+    private List<Map<String, Object>> products; // List of products in the order
+
     public OrdersModel()
     {
 //        int orderImage,String soldItemName,String price,String orderNumber
@@ -50,5 +61,39 @@ public class OrdersModel {
     public String getCustomername() {
         return customername;
     }
+
+    // New getters and setters for Firebase integration
+    public long getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(long orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public List<Map<String, Object>> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Map<String, Object>> products) {
+        this.products = products;
+    }
 }
+
 

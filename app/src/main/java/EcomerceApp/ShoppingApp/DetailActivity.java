@@ -7,6 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
+import java.util.UUID;
+
 import EcomerceApp.ShoppingApp.Models.CartItem;
 import EcomerceApp.ShoppingApp.databinding.ActivityDetailBinding;
 
@@ -44,38 +49,38 @@ public class DetailActivity extends AppCompatActivity {
             binded.addToCart.setVisibility(View.VISIBLE);
 
             binded.placeOrder.setOnClickListener(view -> {
-                Log.d("DetailActivity", "Button Clicked");
-                if (binded.nameBox.getText().toString().isEmpty() || binded.phoneBox.getText().toString().isEmpty()) {
-                    Toast.makeText(DetailActivity.this, "Missing Required Fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    boolean insertData = helper.insertOrder(
-                            binded.nameBox.getText().toString(),
-                            binded.phoneBox.getText().toString(),
-                            image,
-                            Integer.parseInt(binded.detailprice.getText().toString()),
-                            description,
-                            name,
-                            Integer.parseInt(binded.quantity.getText().toString())
-                    );
-
-                    boolean addData = helper.addOrder(
-                            binded.nameBox.getText().toString(),
-                            binded.phoneBox.getText().toString(),
-                            image,
-                            Integer.parseInt(binded.detailprice.getText().toString()),
-                            description,
-                            name,
-                            Integer.parseInt(binded.quantity.getText().toString())
-                    );
-
-                    if (insertData) {
-                        Toast.makeText(DetailActivity.this, "Order Placed!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(DetailActivity.this, "Order Failed!", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                Log.d("DetailActivity", "Order Now Button Clicked");
+                // Get product details
+                String productName = name;
+                double productPrice = Double.parseDouble(price); // Convert String to double
+                int productQuantity = Integer.parseInt(binded.quantity.getText().toString());
+                String productDescription = description;
+                // Calculate total price
+                double totalPrice = productPrice * productQuantity;
+                // Generate a unique orderId
+                String orderId = UUID.randomUUID().toString();
+                // Get the current user ID (assuming FirebaseAuth is used)
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                // Get the current timestamp for the order date
+                long orderDate = System.currentTimeMillis();
+                // Create a single CartItem for the current product
+                CartItem cartItem = new CartItem(productId, productQuantity, productPrice, productName, image);
+                // Add the order to the database
+                helper.addOrder(orderId, userId, List.of(cartItem), totalPrice, orderDate, aVoid -> {
+                    // Order added successfully
+                    Log.d("DetailActivity", "Order placed successfully!");
+                    Toast.makeText(DetailActivity.this, "Order placed successfully!", Toast.LENGTH_SHORT).show();
+                    // Navigate to the OrderActivity
+                    Intent intent = new Intent(DetailActivity.this, OrderActivity.class);
+                    startActivity(intent);
+                }, e -> {
+                    // Error adding order
+                    Log.w("DetailActivity", "Error placing order.", e);
+                    Toast.makeText(DetailActivity.this, "Error placing order.", Toast.LENGTH_SHORT).show();
+                });
             });
 
+            // **Add to Cart**
             // Add Click Listener to Add to Cart Button
             binded.addToCart.setOnClickListener(view -> {
                 // Get product details (you may need to adjust these based on how you are getting your data)
@@ -87,7 +92,7 @@ public class DetailActivity extends AppCompatActivity {
                 Log.d("DetailActivity", "Button Clicked");
 
                 // Create a CartItem
-                CartItem cartItem = new CartItem(productId, productQuantity, productPrice, productName, image); // You can add an image
+                CartItem cartItem = new CartItem(productId, productQuantity, productPrice, productName, image);
                 // Add the item to the cart
                 boolean success = helper.addToCart(cartItem);
                 // Provide feedback to the user
@@ -121,8 +126,6 @@ public class DetailActivity extends AppCompatActivity {
             binded.plus.setVisibility(View.GONE);
             binded.minus.setVisibility(View.GONE);
             binded.quantity.setVisibility(View.GONE);
-            binded.nameBox.setVisibility(View.GONE);
-            binded.phoneBox.setVisibility(View.GONE);
             binded.addToCart.setVisibility(View.GONE);
 
         }

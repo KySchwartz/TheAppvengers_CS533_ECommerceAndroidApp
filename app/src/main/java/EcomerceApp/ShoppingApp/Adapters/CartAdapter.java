@@ -1,4 +1,5 @@
 package EcomerceApp.ShoppingApp.Adapters;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import EcomerceApp.ShoppingApp.Models.CartItem;
 import EcomerceApp.ShoppingApp.R;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
+
 
     private List<CartItem> cartItems;
     private DbHelper dbHelper;
@@ -44,25 +46,31 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.decreaseQuantityButton.setOnClickListener(v -> {
             int currentQuantity = currentItem.getQuantity();
             if (currentQuantity > 1) {
-                currentItem.setQuantity(currentQuantity - 1);
-                holder.quantityTextView.setText(String.valueOf(currentItem.getQuantity()));
-                // Update database
-                //dbHelper.updateCartItem(currentItem); // Implement this method in DbHelper
+                int newQuantity = currentQuantity - 1;
+                currentItem.setQuantity(newQuantity);
+                holder.quantityTextView.setText(String.valueOf(newQuantity));
+
+                // Update the quantity in the database
+                dbHelper.updateCartItemQuantity(currentItem, newQuantity);
             }
         });
 
         // Increase quantity button
         holder.increaseQuantityButton.setOnClickListener(v -> {
-            currentItem.setQuantity(currentItem.getQuantity() + 1);
-            holder.quantityTextView.setText(String.valueOf(currentItem.getQuantity()));
-            // Update database
-            // dbHelper.updateCartItem(currentItem); // Implement this method in DbHelper
+            int newQuantity = currentItem.getQuantity() + 1;
+            currentItem.setQuantity(newQuantity);
+            holder.quantityTextView.setText(String.valueOf(newQuantity));
+
+            // Update the quantity in the database
+            dbHelper.updateCartItemQuantity(currentItem, newQuantity);
         });
 
-        // Remove item button
+        // Remove item from cart
         holder.removeButton.setOnClickListener(v -> {
+            // Log the product ID being removed
+            Log.d("CartAdapter", "Removing product with ID: " + holder.getAdapterPosition());
             // Remove from database
-            // dbHelper.removeFromCart(currentItem); // Implement this method in DbHelper
+            dbHelper.removeFromCart(currentItem);
             // Remove from UI
             cartItems.remove(holder.getAdapterPosition());
             notifyItemRemoved(holder.getAdapterPosition());
@@ -74,6 +82,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return cartItems.size();
     }
 
+
+    // ViewHolder class for cart items
     static class CartViewHolder extends RecyclerView.ViewHolder {
         ImageView productImageView;
         TextView productNameTextView;

@@ -23,7 +23,7 @@ import EcomerceApp.ShoppingApp.Models.OrdersModel;
 import EcomerceApp.ShoppingApp.Models.Product;
 
 public class DbHelper extends SQLiteOpenHelper {
-    //Only one database will be used.
+    //Firebase is used for orders and SQLLite is used for the cart and recently viewed products
     final static String DbName = "foodData.db";
     final static int version = 6;  // Incremented version for new table
     final static String DB_TB = "orders";
@@ -41,8 +41,6 @@ public class DbHelper extends SQLiteOpenHelper {
         super(context, DbName, null, version);
         firestore = FirebaseFirestore.getInstance();
     }
-
-    //private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -183,32 +181,24 @@ public class DbHelper extends SQLiteOpenHelper {
         database.execSQL("DELETE FROM " + RECENTLY_VIEWED_TB);
     }
 
-    public boolean addOrder(String name, String phone, int image, int price, String description, String foodname, int quantity) {
-        Map<String, Object> order = new HashMap<>();
-        order.put("name", name);
-        order.put("phone", phone);
-        order.put("image", image);
-        order.put("price", price);
-        order.put("description", description);
-        order.put("foodname", foodname);
-        order.put("quantity", quantity);
-
-        firestore.collection("orders")//.document(name)
-                .add(order)
-                .addOnSuccessListener(documentReference -> {
-                    // Handle success
-                })
-                .addOnFailureListener(e -> {
-                    // Handle failure
-                });
-        return name != null;
-    }
 
     // Add to cart
     public boolean addToCart(CartItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
+        // Check if the product already exists
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CART + " WHERE productname=?", new String[]{item.getProductName()});
+        if (cursor.getCount() > 0) {
+            // If the product exists, update the quantity
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_QUANTITY, item.getQuantity() + 1); // Increment the quantity by 1
+            int rowsAffected = db.update(TABLE_CART, values, "productname=?", new String[]{item.getProductName()});
+            cursor.close();
+            return rowsAffected > 0; // Return true if the update was successful
+        }
+        cursor.close();
+        
+        // If the product does not exist, insert it
         ContentValues cv = new ContentValues();
-
         cv.put(COLUMN_PRODUCT_ID, item.getProductId());
         cv.put(COLUMN_QUANTITY, item.getQuantity());
         cv.put(COLUMN_PRICE, item.getPrice());
@@ -272,12 +262,32 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public int getCartCount() {
-        int cartCount = 0;
-        List<CartItem> cartItems = getCart();
-        for (CartItem item : cartItems) {
-            cartCount += item.getQuantity();
+        int count = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT SUM(quantity) FROM " + TABLE_CART, null);
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0); // Get the sum of quantities
         }
-        Log.d("CartCount", "Cart count: " + cartCount);
-        return cartCount;
+        cursor.close();
+        db.close();
+        Log.d("DbHelper", "Cart count: " + count);
+        return count;
+    }
+
+    public void removeFromCart(CartItem cartItem) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Use the product ID to delete the item from the cart table
+        db.delete(TABLE_CART, COLUMN_PRODUCT_NAME + " = ?", new String[]{cartItem.getProductName()});
+        Log.d("CartAdapter", "Removed item from cart: " + cartItem.getProductId());
+    }
+
+    public void updateCartItemQuantity(CartItem cartItem, int newQuantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_QUANTITY, newQuantity);
+
+        // Update the quantity for the given product ID
+        db.update(TABLE_CART, values, COLUMN_PRODUCT_NAME + " = ?", new String[]{cartItem.getProductName()});
     }
 }

@@ -33,7 +33,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     DbHelper dbHelper;
-    TextView cartBadgeTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         MenuItem cartItem = menu.findItem(R.id.action_cart);
         View actionView = cartItem.getActionView();
         View cartBadgeTextView = actionView.findViewById(R.id.cart_badge);
-        updateCartCount();
+//        updateCartBadge();
         actionView.setOnClickListener(view -> onOptionsItemSelected(cartItem));
         return true;
     }
@@ -139,15 +139,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Update cart count
-    private void updateCartCount() {
-        if (cartBadgeTextView == null) return;
-        runOnUiThread(() -> {
-            if (dbHelper.getCartCount() == 0) {
-                cartBadgeTextView.setVisibility(View.GONE);
-            } else {
-                cartBadgeTextView.setVisibility(View.VISIBLE);
-                cartBadgeTextView.setText(String.valueOf(dbHelper.getCartCount()));
-            }
-        });
+    private void updateCartBadge() {
+        TextView cartBadge = findViewById(R.id.cart_badge);
+        int cartCount = dbHelper.getCartCount(); // Get the cart count from DbHelper
+        cartBadge.setText(String.valueOf(cartCount)); // Set the count as text
     }
 }

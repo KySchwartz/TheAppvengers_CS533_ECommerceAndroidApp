@@ -1,29 +1,34 @@
 [
   {
+    "productId": "1",
     "name": "Flower Dress",
     "description": "A red and black flower dress",
     "price": "5",
     "image": "dress"
   },
   {
+    "productId": "2",
     "name": "Silver Ring",
     "description": "A silver diamond engagement ring",
     "price": "12",
     "image": "ring"
   },
   {
+    "productId": "3",
     "name": "Locket",
     "description": "A gold simple locket",
     "price": "10",
     "image": "locket"
   },
   {
+    "productId": "4",
     "name": "Turkish Locket",
     "description": "A bronze simple locket",
     "price": "12",
     "image": "lockets"
   },
   {
+    "productId": "5",
     "name": "Pink Dress",
     "description": "An all pink short dress",
     "price": "20",

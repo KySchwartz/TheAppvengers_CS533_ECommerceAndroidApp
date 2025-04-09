@@ -40,6 +40,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -57,7 +58,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
+                    android:minWidth="40dp"
                     android:text="1"
+                    android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -91,32 +94,6 @@
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
             android:text="@string/descriptionFood" />
-
-        <EditText
-            android:id="@+id/nameBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:autofillHints=""
-            android:background="@drawable/edittext_background"
-            android:hint="Your Name"
-            android:inputType="text"
-            android:padding="9dp">
-
-        </EditText>
-
-        <EditText
-            android:id="@+id/phoneBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:autofillHints=""
-            android:background="@drawable/edittext_background"
-            android:hint="Phone"
-            android:inputType="phone"
-            android:padding="9dp">
-
-        </EditText>
 
         <TextView
 

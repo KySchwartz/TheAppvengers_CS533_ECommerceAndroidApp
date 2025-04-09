@@ -41,7 +41,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.viewHolder
         holder.soldItemName.setText(model.getSoldItemName());
         holder.orderNumber.setText("#"+model.getOrderNumber());
         holder.orderPrice.setText(model.getPrice());
-//        holder.customername.setText("Customer Name:"+model.getCustomername());
+        //holder.customername.setText("Customer Name:"+model.getCustomername());
+
+        //Apply OnClick Listener on each item for navigation to detail activity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,6 +53,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.viewHolder
                 context.startActivity(intent);
             }
         });
+
+      // Experimental method to allow orders to be cancelled
       holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
           @Override
           public boolean onLongClick(View view) {
@@ -65,7 +69,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.viewHolder
                                 if(helper.deleteOrder(del)>0)
                                 {
                                     Toast.makeText(context, "##Successfully Deleted", Toast.LENGTH_SHORT).show();
-                                    //Refresh After De
+                                    //Refresh After Deletion
 
 
                                 }
@@ -90,6 +94,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.viewHolder
         return list.size();
     }
 
+    // Displays the details of each order
     public class viewHolder extends RecyclerView.ViewHolder{
         ImageView orderImage;
         TextView soldItemName,orderNumber,orderPrice,customername;
