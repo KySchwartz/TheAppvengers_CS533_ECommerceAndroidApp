@@ -29,7 +29,10 @@
     <string name="orders_menu">View Orders</string>
     <string name="about_menu">About</string>
     <string name="recently_viewed_button">Recently Viewed</string>
-
+    <string name="content_back">Back</string>
+    <string name="text_signup_heading">Create Account</string>
+    <string name="text_signup_subheading">Please fill in the details below.</string>
+    <string name="text_signup_signin">Already have an account? <b> Sign in</b></string>
 
 
 
