@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextyButton">textbutton</style>
+
+    <style name="Button1">button1</style>
+
+    <style name="TransparentToolbar">toolbar</style>
+</resources>
