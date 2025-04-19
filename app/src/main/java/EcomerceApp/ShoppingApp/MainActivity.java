@@ -21,6 +21,7 @@ import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -117,9 +118,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, OrderActivity.class));
         } else if (itemId == R.id.nav_about) {
             loadFragment(new AboutFragment()); // Load "About" fragment
-        } else if (item.getItemId() == R.id.action_cart) {
+        } else if (itemId == R.id.action_cart) {
             // Start the CartActivity
             startActivity(new Intent(this, CartActivity.class));
+            return true;
+        } else if (itemId == R.id.action_logout) {
+            // Call logout method when logout is selected
+            logout();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -143,5 +148,16 @@ public class MainActivity extends AppCompatActivity {
         TextView cartBadge = findViewById(R.id.cart_badge);
         int cartCount = dbHelper.getCartCount(); // Get the cart count from DbHelper
         cartBadge.setText(String.valueOf(cartCount)); // Set the count as text
+    }
+
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.logout();
+
+        Intent intent = new Intent(this, LoginPage.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -20,6 +20,11 @@
         android:title="@string/about_menu"
         android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_logout"
+        android:title="Logout"
+        android:icon="@drawable/ic_logout"
+        app:showAsAction="never"/>
 
 
 </menu>
