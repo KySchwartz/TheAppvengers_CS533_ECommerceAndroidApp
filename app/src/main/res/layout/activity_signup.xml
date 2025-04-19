@@ -1,275 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@drawable/bg_gradient"
+    android:fillViewport="true"
     tools:context=".SignUp">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:onClick="doBackNow"
-        app:navigationIcon="@drawable/ic_back">
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <ScrollView
-        android:layout_below="@id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:fillViewport="true"
-        android:fitsSystemWindows="true"
-        tools:context="in.insideandroid.template.LoginActivity">
+        android:padding="24dp"
+        android:gravity="center_horizontal">
 
-        <RelativeLayout
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/content_back"
+            android:src="@drawable/ic_back"
+             />
+
+        <TextView
+            android:id="@+id/textHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_signup_heading"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/textSubheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_signup_subheading"
+            android:textSize="14sp"
+            android:textColor="#757575"
+            android:gravity="center"
+            android:layout_marginBottom="20dp" />
+
+        <ImageView
+            android:id="@+id/imageLogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="24dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/newlogo"
+            android:contentDescription="App Logo" />
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:scrollbarThumbHorizontal="@null"
-            android:scrollbarThumbVertical="@null"
-            tools:ignore="ScrollViewSize">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@android:color/white">
 
-            <LinearLayout
-                android:layout_centerVertical="true"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:ignore="UselessParent">
+                android:hint="@string/hint_email"
+                android:padding="4dp">
 
-                <RelativeLayout
-                    android:id="@+id/signup_image_layout"
-                    android:layout_gravity="center"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="8dp">
-
-                    <ImageView
-                        android:id="@+id/image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/dummy_image"
-                        tools:ignore="ContentDescription,MissingClass" />
-
-
-                </RelativeLayout>
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_signup_message"
-                    android:textColor="#696969"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="16dp"
-                    android:textStyle="bold" />
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:cardBackgroundColor="@color/colorTextInputBackground"
-                    android:layout_margin="4dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginRight="12dp"
-                        android:background="@android:color/transparent"
-                        android:drawableStart="@drawable/ic_mail"
-                        android:drawableLeft="@drawable/ic_mail"
-                        android:drawablePadding="12dp"
-                        android:hint="@string/hint_email"
-                        android:inputType="textEmailAddress"
-                        android:imeOptions="actionNext"
-                        android:minWidth="320dp"
-                        android:minHeight="45dp"
-                        android:singleLine="true"
-                        tools:ignore="RtlHardcoded" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/colorTextInputBackground"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        app:hintEnabled="false">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_username"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp"
-                            android:background="@android:color/transparent"
-                            android:drawableStart="@drawable/ic_person"
-                            android:drawableLeft="@drawable/ic_person"
-                            android:drawablePadding="12dp"
-                            android:hint="@string/hint_username"
-                            android:imeOptions="actionNext"
-                            android:minWidth="320dp"
-                            android:minHeight="45dp"
-                            android:singleLine="true"
-                            tools:ignore="RtlHardcoded" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/colorTextInputBackground"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        app:hintEnabled="false">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_phone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp"
-                            android:background="@android:color/transparent"
-                            android:drawableStart="@drawable/ic_phone"
-                            android:drawableLeft="@drawable/ic_phone"
-                            android:drawablePadding="12dp"
-                            android:hint="@string/hint_phone"
-                            android:imeOptions="actionNext"
-                            android:minWidth="320dp"
-                            android:minHeight="45dp"
-                            android:singleLine="true"
-                            tools:ignore="RtlHardcoded" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/colorTextInputBackground"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        app:hintEnabled="false"
-                        app:passwordToggleEnabled="true">
-
-                        <EditText
-                            android:id="@+id/et_password"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp"
-                            android:background="@android:color/transparent"
-                            android:drawableStart="@drawable/ic_lock"
-                            android:drawableLeft="@drawable/ic_lock"
-                            android:drawablePadding="12dp"
-                            android:hint="@string/hint_password"
-                            android:imeOptions="actionNext"
-                            android:inputType="textPassword"
-                            android:minWidth="320dp"
-                            android:minHeight="45dp"
-                            tools:ignore="Autofill,RtlHardcoded" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/colorTextInputBackground"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-                </androidx.cardview.widget.CardView>
-
-                <Button
-                    android:id="@+id/button_signin"
-                    style="@style/Button1"
-                    android:layout_width="342dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:onClick="doSaveNow"
-                    android:text="@string/button_sign_up"
-                    tools:ignore="UsingOnClickInXml" />
-
-                <LinearLayout
-                    android:id="@+id/social_layout"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_email"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_black_1000"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp"
-                        android:text="@string/text_signup_social_media" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_margin="8dp"
-                            app:srcCompat="@drawable/ic_facebook"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            tools:ignore="ContentDescription" />
-
-                        <ImageView
-                            android:layout_margin="8dp"
-                            app:srcCompat="@drawable/ic_twitter"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            tools:ignore="ContentDescription" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/button_signup"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textSize="13sp"
-                    android:padding="8dp"
-                    android:text="@string/text_signup_terms" />
-            </LinearLayout>
+                    android:padding="16dp"
+                    android:drawableStart="@drawable/ic_mail"
+                    android:drawablePadding="12dp"
+                    android:autofillHints="emailAddress"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:textColorHint="#9E9E9E"
+                    android:background="@android:color/transparent" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.cardview.widget.CardView>
 
-        </RelativeLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@android:color/white">
 
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_username"
+                android:padding="4dp">
 
-    </ScrollView>
-</RelativeLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:drawableStart="@drawable/ic_person"
+                    android:drawablePadding="12dp"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:textColorHint="#9E9E9E"
+                    android:background="@android:color/transparent" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@android:color/white">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_phone"
+                android:padding="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:drawableStart="@drawable/ic_phone"
+                    android:drawablePadding="12dp"
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:textColorHint="#9E9E9E"
+                    android:background="@android:color/transparent" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@android:color/white">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_password"
+                android:padding="4dp"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:drawableStart="@drawable/ic_lock"
+                    android:drawablePadding="12dp"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColorHint="#9E9E9E"
+                    android:background="@android:color/transparent" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@android:color/white">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_confirm_password"
+                android:padding="4dp"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:drawableStart="@drawable/ic_lock"
+                    android:drawablePadding="12dp"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColorHint="#9E9E9E"
+                    android:background="@android:color/transparent" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.cardview.widget.CardView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_signup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_sign_up"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:padding="14dp"
+            android:backgroundTint="@android:color/black"
+            android:onClick="doSaveNow" />
+
+        <TextView
+            android:id="@+id/text_signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_signup_signin"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:padding="12dp"
+            android:onClick="doBackNow" />
+
+        <TextView
+            android:id="@+id/text_terms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_signup_terms"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+
+    </LinearLayout>
+</ScrollView>
