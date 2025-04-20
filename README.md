@@ -12,7 +12,7 @@ This Android app simulates a shopping experience where users can:
 
 ##  Tech Stack
 
-- **Language:** Kotlin
+- **Language:** Java
 - **IDE:** Android Studio
 - **Build System:** Gradle (KTS)
 - **Firebase Integration:** (via `google-services.json`)
