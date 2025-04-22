@@ -45,6 +45,7 @@ This Android app simulates a shopping experience where users can:
 - Samikshya Adhikari
 - Morgan Snider
 - Nahlik Brenda
+- Nayeem Hossain
 
 ##  Course Information
 
