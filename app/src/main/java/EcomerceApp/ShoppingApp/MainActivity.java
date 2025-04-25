@@ -91,6 +91,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        dbHelper.setOnCartChangeListener(this::updateCartBadge);
+        updateCartBadge(); // Update the cart badge initially
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dbHelper.setOnCartChangeListener(null); // Remove the listener to avoid memory leaks
+    }
+
+    @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (fragment != null) {

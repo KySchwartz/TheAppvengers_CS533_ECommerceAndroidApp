@@ -80,14 +80,27 @@ public class CartActivity extends AppCompatActivity {
     // Helper method to load cart items from SQLite
     private void loadCartItems() {
         List<CartItem> cartItems = dbHelper.getCart();
-        // Update the total price
+
+        // Pass the callback to the adapter
+        adapter = new CartAdapter(cartItems, dbHelper, this::onCartChanged);
+        binding.cartRecyclerView.setAdapter(adapter);
+
+        // Update the total price initially
+        updateTotalPrice(cartItems);
+    }
+
+    // Callback method to handle cart changes
+    private void onCartChanged() {
+        List<CartItem> updatedCartItems = dbHelper.getCart();
+        updateTotalPrice(updatedCartItems); // Update the total price dynamically
+    }
+
+    // Helper method to update the total price
+    private void updateTotalPrice(List<CartItem> cartItems) {
         double totalPrice = 0;
         for (CartItem item : cartItems) {
             totalPrice += item.getPrice() * item.getQuantity();
         }
         binding.totalPrice.setText("Total: $" + String.format("%.2f", totalPrice));
-        // Update the UI
-        adapter = new CartAdapter(cartItems, dbHelper);
-        binding.cartRecyclerView.setAdapter(adapter);
     }
 }

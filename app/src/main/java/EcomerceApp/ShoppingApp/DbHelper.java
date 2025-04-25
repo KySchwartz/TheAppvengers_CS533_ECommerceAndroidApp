@@ -36,6 +36,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_PRODUCT_NAME = "productname";
     public static final String COLUMN_IMAGE_URL = "imageUrl";
+    private OnCartChangeListener onCartChangeListener;
 
     public DbHelper(@Nullable Context context) {
         super(context, DbName, null, version);
@@ -66,6 +67,20 @@ public class DbHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + RECENTLY_VIEWED_TB);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_CART);
             onCreate(db);
+        }
+    }
+
+    public interface OnCartChangeListener {
+        void onCartChanged();
+    }
+
+    public void setOnCartChangeListener(OnCartChangeListener listener) {
+        this.onCartChangeListener = listener;
+    }
+
+    public void notifyCartChanged() {
+        if (onCartChangeListener != null) {
+            onCartChangeListener.onCartChanged();
         }
     }
 
@@ -185,6 +200,7 @@ public class DbHelper extends SQLiteOpenHelper {
     // Add to cart
     public boolean addToCart(CartItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
+        notifyCartChanged();
         // Check if the product already exists
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CART + " WHERE productname=?", new String[]{item.getProductName()});
         if (cursor.getCount() > 0) {
@@ -232,6 +248,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //Empty cart
     public boolean emptyCart() {
+        notifyCartChanged();
         SQLiteDatabase db = this.getWritableDatabase();
         long delete = db.delete(TABLE_CART, null, null);
         return delete != -1;
@@ -275,6 +292,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public void removeFromCart(CartItem cartItem) {
+        notifyCartChanged();
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Use the product ID to delete the item from the cart table
@@ -284,6 +302,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void updateCartItemQuantity(CartItem cartItem, int newQuantity) {
         SQLiteDatabase db = this.getWritableDatabase();
+        notifyCartChanged();
         ContentValues values = new ContentValues();
         values.put(COLUMN_QUANTITY, newQuantity);
 

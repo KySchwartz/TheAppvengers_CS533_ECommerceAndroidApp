@@ -20,9 +20,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     private List<CartItem> cartItems;
     private DbHelper dbHelper;
-    public CartAdapter(List<CartItem> cartItems, DbHelper dbHelper) {
+    private OnCartChangeListener onCartChangeListener;
+
+    public interface OnCartChangeListener {
+        void onCartChanged();
+    }
+
+    public CartAdapter(List<CartItem> cartItems, DbHelper dbHelper, OnCartChangeListener onCartChangeListener) {
         this.cartItems = cartItems;
         this.dbHelper = dbHelper;
+        this.onCartChangeListener = onCartChangeListener;
     }
 
     @NonNull
@@ -53,6 +60,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 // Update the quantity in the database
                 dbHelper.updateCartItemQuantity(currentItem, newQuantity);
             }
+
+            notifyItemChanged(position);
+            if (onCartChangeListener != null) {
+                onCartChangeListener.onCartChanged(); // Notify the activity
+            }
         });
 
         // Increase quantity button
@@ -63,6 +75,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
             // Update the quantity in the database
             dbHelper.updateCartItemQuantity(currentItem, newQuantity);
+
+            notifyItemChanged(position);
+            if (onCartChangeListener != null) {
+                onCartChangeListener.onCartChanged(); // Notify the activity
+            }
         });
 
         // Remove item from cart
@@ -74,6 +91,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             // Remove from UI
             cartItems.remove(holder.getAdapterPosition());
             notifyItemRemoved(holder.getAdapterPosition());
+
+            notifyItemRangeChanged(position, cartItems.size());
+            if (onCartChangeListener != null) {
+                onCartChangeListener.onCartChanged(); // Notify the activity
+            }
         });
     }
 
