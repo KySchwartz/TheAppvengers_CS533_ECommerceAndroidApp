@@ -34,6 +34,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     DbHelper dbHelper;
+    private TextView cartBadge;
 
 
     @Override
@@ -105,9 +106,16 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         MenuItem cartItem = menu.findItem(R.id.action_cart);
         View actionView = cartItem.getActionView();
-        View cartBadgeTextView = actionView.findViewById(R.id.cart_badge);
-//        updateCartBadge();
+
+        // Get the cart_badge TextView from the action view
+        cartBadge = actionView.findViewById(R.id.cart_badge);
+
+        // Set an onClickListener for the cart icon
         actionView.setOnClickListener(view -> onOptionsItemSelected(cartItem));
+
+        // Update the cart badge initially
+        updateCartBadge();
+
         return true;
     }
 
@@ -145,9 +153,15 @@ public class MainActivity extends AppCompatActivity {
 
     // Update cart count
     private void updateCartBadge() {
-        TextView cartBadge = findViewById(R.id.cart_badge);
-        int cartCount = dbHelper.getCartCount(); // Get the cart count from DbHelper
-        cartBadge.setText(String.valueOf(cartCount)); // Set the count as text
+        if (cartBadge != null) { // Ensure the cartBadge reference is not null
+            int cartCount = dbHelper.getCartCount(); // Get the cart count from DbHelper
+            if (cartCount > 0) {
+                cartBadge.setVisibility(View.VISIBLE); // Show the badge
+                cartBadge.setText(String.valueOf(cartCount)); // Set the count as text
+            } else {
+                cartBadge.setVisibility(View.GONE); // Hide the badge if the cart is empty
+            }
+        }
     }
 
     public void logout() {
