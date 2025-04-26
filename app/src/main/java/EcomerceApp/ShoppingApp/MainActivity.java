@@ -21,6 +21,7 @@ import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -40,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -55,6 +60,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, RecentlyViewedActivity.class);
                 startActivity(intent);
             }
+        });
+
+        // Setup "Users List" Button
+        Button btnUsersList = findViewById(R.id.btn_users_list);
+        btnUsersList.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserListActivity.class);
+            startActivity(intent);
         });
 
         // Read JSON from assets and populate main product list
@@ -146,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (itemId == R.id.action_logout) {
             // Call logout method when logout is selected
             logout();
+            return true;
+        } else if (itemId == R.id.users_list) {
+            // Start the UserListActivity
+            startActivity(new Intent(this, UserListActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

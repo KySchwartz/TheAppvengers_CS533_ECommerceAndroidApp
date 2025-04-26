@@ -1,10 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
     <!-- RecyclerView for product list (Takes up most of the space) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -13,15 +13,30 @@
         android:layout_weight="5"
         tools:listitem="@layout/sample_mainfood"/>
 
-    <!-- Recently Viewed Button (Moves to the bottom) -->
-    <Button
-        android:id="@+id/btn_recently_viewed"
-        android:layout_width="wrap_content"
+    <!-- Button container -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/recently_viewed_button"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
 
+        <!-- Recently Viewed Button -->
+        <Button
+            android:id="@+id/btn_recently_viewed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recently_viewed_button"
+            android:layout_marginEnd="10dp"/>
+
+        <!-- Users List Button -->
+        <Button
+            android:id="@+id/btn_users_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/users_list_button"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
 
     <!-- Empty fragment container (Hidden initially) -->
     <FrameLayout
