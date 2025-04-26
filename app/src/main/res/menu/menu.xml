@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_cart"
         android:title="Cart"
         app:showAsAction="always"
-        app:actionLayout="@layout/cart_item" />
+        app:actionLayout="@layout/cart_action_item" />
 
     <item
         android:id="@+id/users_list"

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+
+        <item name="colorPrimary">@color/md_light_green_700</item>
+        <item name="colorPrimaryDark">@color/md_light_green_900</item>
+        <item name="colorAccent">@color/md_brown_400</item>
+        <item name="android:statusBarColor">@color/md_light_green_900</item>
+    </style>
+
 
     <style name="TextyButton">textbutton</style>
-
     <style name="Button1">button1</style>
 
-    <style name="TransparentToolbar">toolbar</style>
+    <style name="TransparentToolbar">
+        <item name="android:background">@color/md_light_green_700</item>
+    </style>
 </resources>
