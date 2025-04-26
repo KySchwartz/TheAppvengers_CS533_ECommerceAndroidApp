@@ -41,6 +41,7 @@ dependencies {
     implementation ("com.google.android.material:material:1.5.0")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.3")
     implementation ("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation ("androidx.cardview:cardview:1.0.0")
     implementation(libs.firebase.firestore)
     testImplementation ("junit:junit:4.+")
     androidTestImplementation ("androidx.test.ext:junit:1.1.3")
