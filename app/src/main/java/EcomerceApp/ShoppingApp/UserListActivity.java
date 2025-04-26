@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,7 @@ public class UserListActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView tvNoUsers;
     private Button btnAddTestUser;
+    private Button btnViewAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +60,16 @@ public class UserListActivity extends AppCompatActivity {
         progressBar = binding.progressBar;
         tvNoUsers = binding.tvNoUsers;
         btnAddTestUser = binding.btnAddTestUser;
+        btnViewAnalytics = binding.btnViewAnalytics;
 
         // Set up the Add Test User button
         btnAddTestUser.setOnClickListener(v -> addTestUser());
+
+        // Set up the View Analytics button
+        btnViewAnalytics.setOnClickListener(v -> {
+            Intent intent = new Intent(UserListActivity.this, UserAnalyticsActivity.class);
+            startActivity(intent);
+        });
 
         // Initialize RecyclerView
         userList = new ArrayList<>();

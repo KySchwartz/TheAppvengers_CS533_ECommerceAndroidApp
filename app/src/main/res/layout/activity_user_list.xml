@@ -10,16 +10,35 @@
         android:id="@+id/recyclerViewUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btnAddTestUser"
+        android:layout_above="@+id/buttonContainer"
         android:padding="8dp" />
 
-    <Button
-        android:id="@+id/btnAddTestUser"
+    <LinearLayout
+        android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:text="Add Test User" />
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
+
+        <Button
+            android:id="@+id/btnAddTestUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Add Test User" />
+
+        <Button
+            android:id="@+id/btnViewAnalytics"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="View Analytics" />
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
