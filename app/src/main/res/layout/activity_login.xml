@@ -75,6 +75,7 @@
                     android:singleLine="true"
                     android:padding="16dp"
                     android:textColorHint="#9E9E9E"
+                    android:textColor="@android:color/black"
                     android:autofillHints="emailAddress"
                     android:background="@android:color/transparent"
                     android:drawableStart="@drawable/ic_person"/>
@@ -106,6 +107,7 @@
                     android:inputType="textPassword"
                     android:singleLine="true"
                     android:padding="16dp"
+                    android:textColor="@android:color/black"
                     android:textColorHint="#9E9E9E"
                     android:background="@android:color/transparent"
                     android:drawableStart="@drawable/ic_lock"/>

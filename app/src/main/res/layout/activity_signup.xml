@@ -83,6 +83,7 @@
                     android:autofillHints="emailAddress"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
+                    android:textColor="@android:color/black"
                     android:textColorHint="#9E9E9E"
                     android:background="@android:color/transparent" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -112,6 +113,7 @@
                     android:drawablePadding="12dp"
                     android:inputType="textPersonName"
                     android:singleLine="true"
+                    android:textColor="@android:color/black"
                     android:textColorHint="#9E9E9E"
                     android:background="@android:color/transparent" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -141,6 +143,7 @@
                     android:drawablePadding="12dp"
                     android:inputType="phone"
                     android:singleLine="true"
+                    android:textColor="@android:color/black"
                     android:textColorHint="#9E9E9E"
                     android:background="@android:color/transparent" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -171,6 +174,7 @@
                     android:drawablePadding="12dp"
                     android:inputType="textPassword"
                     android:singleLine="true"
+                    android:textColor="@android:color/black"
                     android:textColorHint="#9E9E9E"
                     android:background="@android:color/transparent" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -201,6 +205,7 @@
                     android:drawablePadding="12dp"
                     android:inputType="textPassword"
                     android:singleLine="true"
+                    android:textColor="@android:color/black"
                     android:textColorHint="#9E9E9E"
                     android:background="@android:color/transparent" />
             </com.google.android.material.textfield.TextInputLayout>
